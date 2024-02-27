@@ -1,0 +1,19 @@
+# Use an official python runtime as parent image. In this case python 3.6
+FROM python:3.7-slim
+
+# Set up pip
+RUN apt-get update
+RUN apt-get install -y python3 python3-pip unzip graphviz curl musescore3
+RUN pip install --upgrade pip
+
+# Set the current directory in the container to /app
+WORKDIR /app
+
+# Copy requirements file and install dependencies
+RUN pip3 install torch torchvision torchaudio
+COPY ./requirements.txt ./app/requirements.txt
+RUN pip install -r ./app/requirements.txt
+
+COPY ./book ./app/book
+
+ENV PYTHONPATH="${PYTHONPATH}:/app"
